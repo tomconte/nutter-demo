@@ -33,7 +33,3 @@ display(df)
 # COMMAND ----------
 
 df.createOrReplaceGlobalTempView('nut_demo')
-
-# COMMAND ----------
-
-
