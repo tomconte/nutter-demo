@@ -12,7 +12,7 @@ class MyDemoFixture(NutterFixture):
     sqlContext.sql('SELECT * FROM avocado_csv LIMIT 1000').createOrReplaceGlobalTempView("temp_test_table")
   
   def run_simple_test(self):
-    dbutils.notebook.run('demo-nut', 600, {'source_table': 'global_temp.temp_test_table'})
+    dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'global_temp.temp_test_table'})
       
   def assertion_simple_test(self):
     # Row count
@@ -27,7 +27,7 @@ class MyDemoFixture(NutterFixture):
     pass
   
   def run_another_test(self):
-    dbutils.notebook.run('demo-nut', 600, {'source_table': 'global_temp.temp_test_table'})
+    dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'global_temp.temp_test_table'})
       
   def assertion_another_test(self):
     # Row count
