@@ -1,0 +1,30 @@
+name: nutter-test
+
+on: [push]
+
+jobs:
+  nutter-test:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Tools
+        run: pip install nutter databricks-cli
+
+      - name: Deploy Notebooks
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks workspace import_dir --overwrite notebooks /Shared/nutter-demo
+          databricks workspace import_dir --overwrite tests /Shared/nutter-demo
+
+      - name: Run Nutter tests
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          nutter list /Shared/nutter-demo/tests
