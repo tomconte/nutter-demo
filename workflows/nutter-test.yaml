@@ -1,0 +1,25 @@
+name: nutter-test
+
+on: [push]
+
+jobs:
+  nutter-test:
+    environment: test
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Install Nutter
+        run: pip install nutter
+
+      - name: Copy Notebooks
+        run: echo foo
+
+      - name: Run Nutter tests
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          nutter list /Shared/nutter-demo/tests
