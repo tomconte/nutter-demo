@@ -19,12 +19,12 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          databricks workspace import_dir --overwrite notebooks /Shared/nutter-demo
-          databricks workspace import_dir --overwrite tests /Shared/nutter-demo
+          databricks workspace import_dir --overwrite notebooks /Shared/nutter-demo/notebooks
+          databricks workspace import_dir --overwrite tests /Shared/nutter-demo/tests
 
       - name: Run Nutter tests
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          nutter list /Shared/nutter-demo/tests
+          nutter run /Shared/nutter-demo/tests/test_demo-nut_complete --cluster_id ${{ secrets.DATABRICKS_CLUSTER_ID }}
