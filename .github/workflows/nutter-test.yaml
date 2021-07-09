@@ -19,8 +19,8 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          databricks workspace import_dir --overwrite notebooks /Shared/nutter-demo
-          databricks workspace import_dir --overwrite tests /Shared/nutter-demo
+          databricks workspace import_dir --overwrite notebooks /Shared/nutter-demo/notebooks
+          databricks workspace import_dir --overwrite tests /Shared/nutter-demo/tests
 
       - name: Run Nutter tests
         env:
