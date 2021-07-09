@@ -11,11 +11,15 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: Install Nutter
-        run: pip install nutter
+      - name: Install Tools
+        run: pip install nutter databricks-cli
 
-      - name: Copy Notebooks
-        run: echo foo
+      - name: Deploy Notebooks
+        env:
+          DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+          DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+        run: |
+          databricks workspace import_dir --overwrite . /Shared/nutter-demo
 
       - name: Run Nutter tests
         env:
