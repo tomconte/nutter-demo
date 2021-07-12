@@ -32,4 +32,10 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          nutter run $DATABRICKS_PATH/tests/demo-nut* --cluster_id ${{ secrets.DATABRICKS_CLUSTER_ID }}
+          nutter run $DATABRICKS_PATH/tests/demo-nut* --cluster_id ${{ secrets.DATABRICKS_CLUSTER_ID }} --junit_report
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v1
+        if: always()
+        with:
+          files: '**/test-*.xml'
