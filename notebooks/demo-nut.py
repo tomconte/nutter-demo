@@ -7,7 +7,7 @@ dbutils.widgets.text('source_table', '')
 
 # COMMAND ----------
 
-df = sqlContext.sql('SELECT * FROM ' + dbutils.widgets.get('source_table') + ' LIMIT 100')
+df = sqlContext.sql('SELECT * FROM ' + dbutils.widgets.get('source_table') + ' LIMIT 1000')
 
 # COMMAND ----------
 
