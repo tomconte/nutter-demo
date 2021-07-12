@@ -33,4 +33,4 @@ print(result.to_string())
 
 # COMMAND ----------
 
-
+result.exit(dbutils)
