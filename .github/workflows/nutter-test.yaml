@@ -2,6 +2,9 @@ name: nutter-test
 
 on: [push]
 
+env:
+  DATABRICKS_PATH: /Shared/nutter-demo
+
 jobs:
   nutter-test:
     environment: test
@@ -19,12 +22,14 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          databricks workspace import_dir --overwrite notebooks /Shared/nutter-demo/notebooks
-          databricks workspace import_dir --overwrite tests /Shared/nutter-demo/tests
+          databricks workspace rm -r $DATABRICKS_PATH
+          databricks workspace mkdirs $DATABRICKS_PATH
+          databricks workspace import_dir --overwrite notebooks $DATABRICKS_PATH/notebooks
+          databricks workspace import_dir --overwrite tests $DATABRICKS_PATH/tests
 
       - name: Run Nutter tests
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          nutter run /Shared/nutter-demo/tests/demo-nut* --cluster_id ${{ secrets.DATABRICKS_CLUSTER_ID }}
+          nutter run $DATABRICKS_PATH/tests/demo-nut* --cluster_id ${{ secrets.DATABRICKS_CLUSTER_ID }}
