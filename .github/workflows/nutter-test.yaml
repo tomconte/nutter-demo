@@ -27,4 +27,4 @@ jobs:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
         run: |
-          nutter run /Shared/nutter-demo/tests/test_demo-nut_complete --cluster_id ${{ secrets.DATABRICKS_CLUSTER_ID }}
+          nutter run /Shared/nutter-demo/tests/demo-nut* --cluster_id ${{ secrets.DATABRICKS_CLUSTER_ID }}
