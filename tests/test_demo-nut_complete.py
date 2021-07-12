@@ -1,5 +1,5 @@
 # Databricks notebook source
-# Simple test with Nutter
+# More complete test with Nutter
 
 # COMMAND ----------
 
