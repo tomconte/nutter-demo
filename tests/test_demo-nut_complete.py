@@ -3,42 +3,64 @@
 
 # COMMAND ----------
 
+import json
+
 from runtime.nutterfixture import NutterFixture
 
 # COMMAND ----------
 
 class MyDemoFixture(NutterFixture):
+  
+  # Setup
+  
   def before_all(self):
     sqlContext.sql('SELECT * FROM avocado_csv LIMIT 1000').createOrReplaceGlobalTempView("temp_test_table")
   
+  # Simple test
+  
   def run_simple_test(self):
-    dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'global_temp.temp_test_table'})
+    res = dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'global_temp.temp_test_table'})
+    self.simple_result = json.loads(res)
       
   def assertion_simple_test(self):
+    # Destination table name
+    expected_tbl_name = "temp_test_table_preproc"
+    assert self.simple_result['table'] == expected_tbl_name
     # Row count
-    tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.nut_demo').first()
+    tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.' + expected_tbl_name).first()
     assert tbl_count[0] == 1000
     # Schema
-    tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.nut_demo')
+    tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.' + expected_tbl_name)
     assert tbl_schema.count() == 9
 
+  # Another test
+  
   def before_another_test(self):
-    # Create some data frames on the fly?
+    sqlContext.sql('SELECT * FROM avocado_csv LIMIT 1000').createOrReplaceGlobalTempView("another_temp_test_table")
     pass
   
   def run_another_test(self):
-    dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'global_temp.temp_test_table'})
+    res = dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'global_temp.another_temp_test_table'})
+    self.another_result = json.loads(res)
       
   def assertion_another_test(self):
+    # Destination table name
+    expected_tbl_name = "another_temp_test_table_preproc"
+    assert self.another_result['table'] == expected_tbl_name
     # Row count
-    tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.nut_demo').first()
+    tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.' + expected_tbl_name).first()
     assert tbl_count[0] == 1000
     # Schema
-    tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.nut_demo')
+    tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.' + expected_tbl_name)
     assert tbl_schema.count() == 9
+  
+  def after_another_test(self):
+    sqlContext.sql('DROP TABLE global_temp.another_temp_test_table')
 
+  # Cleanup
+  
   def after_all(self):
-    pass
+    sqlContext.sql('DROP TABLE global_temp.temp_test_table')
 
 # COMMAND ----------
 
