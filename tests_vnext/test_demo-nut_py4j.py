@@ -9,7 +9,7 @@ from runtime.nutterfixture import NutterFixture
 
 class MyDemoFixture(NutterFixture):
   def run_test_name(self):
-    dbutils.notebook.run('demo-nut', 600, {'source_table': 'avocado_csvxxx'})
+    dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'avocado_csvxxx'})
       
   def assertion_test_name(self):
     # Row count
