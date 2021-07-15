@@ -7,10 +7,8 @@ dbutils.widgets.text('source_table', '')
 
 # COMMAND ----------
 
-df = sqlContext.sql('SELECT * FROM ' + dbutils.widgets.get('source_table'))
-
-# COMMAND ----------
-
+source_table = dbutils.widgets.get('source_table')
+df = sqlContext.sql('SELECT * FROM ' + source_table)
 df.printSchema()
 
 # COMMAND ----------
@@ -34,4 +32,17 @@ display(df)
 
 # COMMAND ----------
 
-df.createOrReplaceGlobalTempView('nut_demo')
+dest_table = source_table + '_preproc'
+dest_table = dest_table.split('.')[-1] # Keep name after dot
+df.createOrReplaceGlobalTempView(dest_table)
+
+# COMMAND ----------
+
+# Return results
+
+import json
+
+dbutils.notebook.exit(json.dumps({
+  "status": "OK",
+  "table": dest_table
+}))
