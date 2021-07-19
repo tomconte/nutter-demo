@@ -10,6 +10,7 @@ from runtime.nutterfixture import NutterFixture
 # COMMAND ----------
 
 class MyDemoFixture(NutterFixture):
+
   def run_simple_test(self):
     res = dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'avocado_csv'})
     self.result = json.loads(res)
@@ -40,3 +41,7 @@ print(result.to_string())
 # COMMAND ----------
 
 result.exit(dbutils)
+
+# COMMAND ----------
+
+

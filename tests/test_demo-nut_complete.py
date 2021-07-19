@@ -36,7 +36,7 @@ class MyDemoFixture(NutterFixture):
   # Another test
   
   def before_another_test(self):
-    sqlContext.sql('SELECT * FROM avocado_csv LIMIT 1000').createOrReplaceGlobalTempView("another_temp_test_table")
+    sqlContext.sql('SELECT * FROM avocado_csv LIMIT 100').createOrReplaceGlobalTempView("another_temp_test_table")
     pass
   
   def run_another_test(self):
@@ -49,7 +49,7 @@ class MyDemoFixture(NutterFixture):
     assert self.another_result['table'] == expected_tbl_name
     # Row count
     tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.' + expected_tbl_name).first()
-    assert tbl_count[0] == 1000
+    assert tbl_count[0] == 100
     # Schema
     tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.' + expected_tbl_name)
     assert tbl_schema.count() == 9
@@ -77,3 +77,7 @@ print(result.to_string())
 # COMMAND ----------
 
 result.exit(dbutils)
+
+# COMMAND ----------
+
+
