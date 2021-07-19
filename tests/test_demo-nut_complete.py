@@ -55,12 +55,12 @@ class MyDemoFixture(NutterFixture):
     assert tbl_schema.count() == 9
   
   def after_another_test(self):
-    sqlContext.sql('DROP TABLE global_temp.another_temp_test_table')
+    sqlContext.sql('DROP TABLE global_temp.another_temp_test_table_preproc')
 
   # Cleanup
   
   def after_all(self):
-    sqlContext.sql('DROP TABLE global_temp.temp_test_table')
+    sqlContext.sql('DROP TABLE global_temp.temp_test_table_preproc')
 
 # COMMAND ----------
 
