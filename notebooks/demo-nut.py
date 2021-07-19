@@ -46,3 +46,7 @@ dbutils.notebook.exit(json.dumps({
   "status": "OK",
   "table": dest_table
 }))
+
+# COMMAND ----------
+
+
