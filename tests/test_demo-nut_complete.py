@@ -51,7 +51,7 @@ class MyDemoFixture(NutterFixture):
       
   def assertion_another_test(self):
     # The region column should contain no lower case characters
-    tbl_lower = sqlContext.sql('SELECT COUNT(*) FROM global_temp.another_temp_test_table_preproc WHERE region RLIKE "[a-a]+"').first()
+    tbl_lower = sqlContext.sql('SELECT COUNT(*) FROM global_temp.another_temp_test_table_preproc WHERE region RLIKE "[a-z]+"').first()
     assert tbl_lower[0] == 0
   
   def after_another_test(self):
