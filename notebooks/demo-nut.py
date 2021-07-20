@@ -24,7 +24,7 @@ df = df.withColumnRenamed('Date', 'date')\
 
 # TODO: do more stuff eventually
 
-df = df.withColumn('type', upper('region'))
+df = df.withColumn('region', upper('region'))
 
 # COMMAND ----------
 
