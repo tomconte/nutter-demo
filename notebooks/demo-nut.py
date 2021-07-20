@@ -20,7 +20,7 @@ from pyspark.sql.functions import upper
 df = df.withColumnRenamed('Date', 'date')\
        .withColumnRenamed('AveragePrice', 'average_price')\
        .withColumnRenamed('Total Volume', 'total_volume')\
-       .drop('_c0', 'Total Bags', 'Small Bags', 'Large Bags', 'XLarge Bags')
+       .drop('Total Bags', 'Small Bags', 'Large Bags', 'XLarge Bags')
 
 # TODO: do more stuff eventually
 
