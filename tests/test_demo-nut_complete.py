@@ -10,7 +10,13 @@ from runtime.nutterfixture import NutterFixture
 # COMMAND ----------
 
 class MyDemoFixture(NutterFixture):
+
+  # Constructor
   
+  def __init__(self):
+    self.expected_tbl_name = "temp_test_table_preproc"
+    super().__init__()
+
   # Setup
   
   def before_all(self):
@@ -24,19 +30,19 @@ class MyDemoFixture(NutterFixture):
       
   def assertion_simple_test(self):
     # Destination table name
-    expected_tbl_name = "temp_test_table_preproc"
-    assert self.simple_result['table'] == expected_tbl_name
+    
+    assert self.simple_result['table'] == self.expected_tbl_name
     # Row count
-    tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.' + expected_tbl_name).first()
+    tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.' + self.expected_tbl_name).first()
     assert tbl_count[0] == 1000
     # Schema
-    tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.' + expected_tbl_name)
+    tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.' + self.expected_tbl_name)
     assert tbl_schema.count() == 9
 
   # Another test
   
   def before_another_test(self):
-    sqlContext.sql('SELECT * FROM avocado_csv LIMIT 100').createOrReplaceGlobalTempView("another_temp_test_table")
+    sqlContext.sql('SELECT DISTINCT(region) FROM avocado_csv').createOrReplaceGlobalTempView("another_temp_test_table")
     pass
   
   def run_another_test(self):
@@ -44,17 +50,12 @@ class MyDemoFixture(NutterFixture):
     self.another_result = json.loads(res)
       
   def assertion_another_test(self):
-    # Destination table name
-    expected_tbl_name = "another_temp_test_table_preproc"
-    assert self.another_result['table'] == expected_tbl_name
-    # Row count
-    tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.' + expected_tbl_name).first()
-    assert tbl_count[0] == 100
-    # Schema
-    tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.' + expected_tbl_name)
-    assert tbl_schema.count() == 9
+    # The region column should contain no lower case characters
+    tbl_lower = sqlContext.sql('SELECT COUNT(*) FROM global_temp.another_temp_test_table_preproc WHERE region RLIKE "[a-a]+"').first()
+    assert tbl_lower[0] == 0
   
   def after_another_test(self):
+    sqlContext.sql('DROP TABLE global_temp.another_temp_test_table')
     sqlContext.sql('DROP TABLE global_temp.another_temp_test_table_preproc')
 
   # Cleanup
