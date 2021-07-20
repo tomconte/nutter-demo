@@ -1,10 +1,10 @@
 # Databricks notebook source
-# Simple test with Nutter
+# Parallel test with Nutter
 
 # COMMAND ----------
 
 from runtime.nutterfixture import NutterFixture
-from runtime.runner import NutterRunner
+from runtime.runner import NutterFixtureParallelRunner
 
 # COMMAND ----------
 
@@ -14,37 +14,22 @@ class MyDemoFixture(NutterFixture):
       
   def assertion_test_name(self):
     # Row count
-    tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.nut_demo').first()
+    tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.avocado_csv_preproc').first()
     assert tbl_count[0] == 18249
     # Schema
-    tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.nut_demo')
+    tbl_schema = sqlContext.sql('DESCRIBE TABLE global_temp.avocado_csv_preproc')
     assert tbl_schema.count() == 9
 
 # COMMAND ----------
 
-tests = [
-  MyDemoFixture(),
-  MyDemoFixture(),
-  MyDemoFixture(),
-  MyDemoFixture(),
-  MyDemoFixture(),
-  MyDemoFixture(),
-  MyDemoFixture(),
-  MyDemoFixture()
-]
+runner = NutterFixtureParallelRunner(4)
+for i in range(8):
+  runner.add_test_fixture(MyDemoFixture())
 
 # COMMAND ----------
 
-runner = NutterRunner(tests, 4)
-
-# COMMAND ----------
-
-result = runner.execute_tests()
+result = runner.execute()
 
 # COMMAND ----------
 
 print(result.to_string())
-
-# COMMAND ----------
-
-
