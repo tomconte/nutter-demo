@@ -12,12 +12,12 @@ from runtime.nutterfixture import NutterFixture
 class MyDemoFixture(NutterFixture):
 
   def run_simple_test(self):
-    res = dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'avocado_csv'})
+    res = dbutils.notebook.run('../notebooks/demo-nut', 600, {'source_table': 'avocado'})
     self.result = json.loads(res)
       
   def assertion_simple_test(self):
     # Destination table name
-    expected_tbl_name = "avocado_csv_preproc"
+    expected_tbl_name = "avocado_preproc"
     assert self.result['table'] == expected_tbl_name
     # Row count
     tbl_count = sqlContext.sql('SELECT COUNT(*) FROM global_temp.' + expected_tbl_name).first()
