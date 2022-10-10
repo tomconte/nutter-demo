@@ -20,7 +20,7 @@ class MyDemoFixture(NutterFixture):
   # Setup
   
   def before_all(self):
-    sqlContext.sql('SELECT * FROM avocado_csv LIMIT 1000').createOrReplaceGlobalTempView("temp_test_table")
+    sqlContext.sql('SELECT * FROM avocado LIMIT 1000').createOrReplaceGlobalTempView("temp_test_table")
   
   # Simple test
   
@@ -42,7 +42,7 @@ class MyDemoFixture(NutterFixture):
   # Another test
   
   def before_another_test(self):
-    sqlContext.sql('SELECT DISTINCT(region) FROM avocado_csv').createOrReplaceGlobalTempView("another_temp_test_table")
+    sqlContext.sql('SELECT DISTINCT(region) FROM avocado').createOrReplaceGlobalTempView("another_temp_test_table")
     pass
   
   def run_another_test(self):
